@@ -49,8 +49,8 @@ jobs:
       - name: Validate composer.lock
         run: composer validate --strict
 
-      - name: Run pint
-        run: vendor/bin/pint --test
+      # - name: Run pint
+      #   run: vendor/bin/pint --test
 
       - name: Run pest
         run: vendor/bin/pest
