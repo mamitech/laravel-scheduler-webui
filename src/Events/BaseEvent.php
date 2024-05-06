@@ -10,7 +10,7 @@ class BaseEvent
     use InteractsWithSockets;
     use Dispatchable;
 
-    public function __construct(protected string $action, protected string $command)
+    public function __construct(public string $action, public string $command)
     {
     }
 }
