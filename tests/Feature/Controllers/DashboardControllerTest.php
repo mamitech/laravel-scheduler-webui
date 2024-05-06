@@ -1,8 +1,12 @@
 <?php
 
 use Acdphp\SchedulePolice\Data\ExecResult;
+use Acdphp\SchedulePolice\Events\ExecCommandEvent;
+use Acdphp\SchedulePolice\Events\StartScheduleEvent;
+use Acdphp\SchedulePolice\Events\StopScheduleEvent;
 use Acdphp\SchedulePolice\Http\Middleware\RestrictedAccess;
 use Acdphp\SchedulePolice\Services\SchedulePoliceService;
+use Illuminate\Support\Facades\Event;
 
 it('has an index page', function () {
     $this->withoutMiddleware([RestrictedAccess::class]);
@@ -26,6 +30,7 @@ it('cannot access index page on non local', function () {
 });
 
 it('can stop scheduled event', function () {
+    Event::fake();
     $this->withoutMiddleware([RestrictedAccess::class]);
 
     $this->mock(SchedulePoliceService::class, function ($service) {
@@ -39,9 +44,12 @@ it('can stop scheduled event', function () {
         'expression' => '* * * * *',
     ])
         ->assertRedirectToRoute('schedule-police.index');
+
+    Event::assertDispatched(StopScheduleEvent::class);
 });
 
 it('can start scheduled event', function () {
+    Event::fake();
     $this->withoutMiddleware([RestrictedAccess::class]);
 
     $this->mock(SchedulePoliceService::class, function ($service) {
@@ -55,9 +63,12 @@ it('can start scheduled event', function () {
         'expression' => '* * * * *',
     ])
         ->assertRedirectToRoute('schedule-police.index');
+
+    Event::assertDispatched(StartScheduleEvent::class);
 });
 
 it('can execute commands', function () {
+    Event::fake();
     $this->withoutMiddleware([RestrictedAccess::class]);
 
     $this->mock(SchedulePoliceService::class, function ($service) {
@@ -71,4 +82,6 @@ it('can execute commands', function () {
         'command' => 'inspire',
     ])
         ->assertRedirect(route('schedule-police.index').'#v-execute');
+
+    Event::assertDispatched(ExecCommandEvent::class);
 });
