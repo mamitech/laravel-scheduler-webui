@@ -1,12 +1,12 @@
 {
-    "name": "acdphp/laravel-schedule-police",
+    "name": "mamitech/laravel-scheduler-webui",
     "description": "Stop, start or execute scheduled commands from a simple dashboard without redeploying, while maintaining the visibility, control, and reviewability of the configurations in your codebase.",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Carlo Dinopol",
-            "email": "carlo.dinopol@gmail.com"
+            "name": "mamitech",
+            "email": "engineering@mamiteam.com"
         }
     ],
     "minimum-stability": "stable",
