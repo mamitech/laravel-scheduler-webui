@@ -30,6 +30,7 @@ class DashboardController extends Controller
             return view('schedule-police::dashboard', [
                 'events' => $this->service->getScheduledEvents(),
                 'enableExecute' => config('schedule-police.enable_execution'),
+                'timeout' => (int) ini_get('max_execution_time'),
             ]);
         }
 
