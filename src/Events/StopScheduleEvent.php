@@ -6,6 +6,6 @@ class StopScheduleEvent extends BaseEvent
 {
     public function __construct(string $command)
     {
-        parent::__construct('stop_schedule', $command);
+        parent::__construct(BaseEvent::STOP_SCHEDULE_ACTION, $command);
     }
 }
