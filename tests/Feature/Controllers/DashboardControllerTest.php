@@ -1,6 +1,7 @@
 <?php
 
 use Acdphp\SchedulePolice\Data\ExecResult;
+use Acdphp\SchedulePolice\Events\BeforeExecCommandEvent;
 use Acdphp\SchedulePolice\Events\ExecCommandEvent;
 use Acdphp\SchedulePolice\Events\StartScheduleEvent;
 use Acdphp\SchedulePolice\Events\StopScheduleEvent;
@@ -83,5 +84,6 @@ it('can execute commands', function () {
     ])
         ->assertRedirect(route('schedule-police.index').'#v-execute');
 
+    Event::assertDispatched(BeforeExecCommandEvent::class);
     Event::assertDispatched(ExecCommandEvent::class);
 });

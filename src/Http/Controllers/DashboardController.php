@@ -2,7 +2,7 @@
 
 namespace Acdphp\SchedulePolice\Http\Controllers;
 
-use Acdphp\SchedulePolice\Data\ExecResult;
+use Acdphp\SchedulePolice\Events\BeforeExecCommandEvent;
 use Acdphp\SchedulePolice\Events\ExecCommandEvent;
 use Acdphp\SchedulePolice\Events\StartScheduleEvent;
 use Acdphp\SchedulePolice\Events\StopScheduleEvent;
@@ -62,6 +62,9 @@ class DashboardController extends Controller
         }
 
         $command = $request->validated('command');
+
+        BeforeExecCommandEvent::dispatch($command);
+
         $output = $this->service->execCommand($command);
 
         ExecCommandEvent::dispatch($command, !$output->isError);

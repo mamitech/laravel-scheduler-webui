@@ -6,6 +6,6 @@ class StartScheduleEvent extends BaseEvent
 {
     public function __construct(string $command)
     {
-        parent::__construct('start_schedule', $command);
+        parent::__construct(BaseEvent::START_SCHEDULE_ACTION, $command);
     }
 }
