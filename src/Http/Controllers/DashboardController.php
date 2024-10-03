@@ -2,6 +2,10 @@
 
 namespace Acdphp\SchedulePolice\Http\Controllers;
 
+use Acdphp\SchedulePolice\Events\BeforeExecCommandEvent;
+use Acdphp\SchedulePolice\Events\ExecCommandEvent;
+use Acdphp\SchedulePolice\Events\StartScheduleEvent;
+use Acdphp\SchedulePolice\Events\StopScheduleEvent;
 use Acdphp\SchedulePolice\Http\Requests\ControlRequest;
 use Acdphp\SchedulePolice\Http\Requests\ExecRequest;
 use Acdphp\SchedulePolice\Services\SchedulePoliceService;
@@ -26,6 +30,7 @@ class DashboardController extends Controller
             return view('schedule-police::dashboard', [
                 'events' => $this->service->getScheduledEvents(),
                 'enableExecute' => config('schedule-police.enable_execution'),
+                'timeout' => (int) ini_get('max_execution_time'),
             ]);
         }
 
@@ -36,12 +41,16 @@ class DashboardController extends Controller
     {
         $this->service->stopSchedule(...$request->validated());
 
+        StopScheduleEvent::dispatch($request->validated('key'));
+
         return Redirect::route('schedule-police.index');
     }
 
     public function start(ControlRequest $request): RedirectResponse
     {
         $this->service->startSchedule(...$request->validated());
+
+        StartScheduleEvent::dispatch($request->validated('key'));
 
         return Redirect::route('schedule-police.index');
     }
@@ -53,7 +62,12 @@ class DashboardController extends Controller
         }
 
         $command = $request->validated('command');
+
+        BeforeExecCommandEvent::dispatch($command);
+
         $output = $this->service->execCommand($command);
+
+        ExecCommandEvent::dispatch($command, !$output->isError);
 
         return Redirect::route('schedule-police.index')
             ->withFragment('#v-execute')
