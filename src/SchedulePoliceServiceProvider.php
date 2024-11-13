@@ -20,9 +20,9 @@ class SchedulePoliceServiceProvider extends ServiceProvider
         $this->load();
         $this->publish();
 
-        $this->app->singleton(Schedule::class, function () {
-            return new ControlledSchedule(config('app.timezone'));
-        });
+        // $this->app->singleton(Schedule::class, function () {
+        //     return new ControlledSchedule(config('app.timezone'));
+        // });
 
         if (app()->runningUnitTests()) {
             $this->commands([
