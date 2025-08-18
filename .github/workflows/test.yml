@@ -19,10 +19,10 @@ on:
 jobs:
   build:
     name: Test Suite
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
@@ -35,14 +35,14 @@ jobs:
         run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
       - name: Cache composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: composer-${{ hashFiles('composer.lock') }}
           restore-keys: composer-
 
       - name: Install Composer dependencies
-        run: composer install -n
+        uses: ramsey/composer-install@v3
 
       - uses: symfonycorp/security-checker-action@v4
 
