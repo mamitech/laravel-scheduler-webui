@@ -18,8 +18,12 @@ on:
 
 jobs:
   build:
-    name: Test Suite
+    name: Test Suite (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.4']
 
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +31,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: ${{ matrix.php }}
           extensions: mbstring, xml, hash, ctype, iconv, curl
 
       - name: Get composer cache directory

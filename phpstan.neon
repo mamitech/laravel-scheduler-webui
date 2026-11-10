@@ -7,9 +7,13 @@ parameters:
     paths:
         - src
     level: 6
-    checkMissingIterableValueType: false
     reportUnmatchedIgnoredErrors: false
-    checkGenericClassInNonGenericObjectType: false
+    ignoreErrors:
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+        -
+            message: '#^Parameter \#1 \$view of function view expects view-string\|null, string given\.$#'
+            path: src/Http/Controllers/DashboardController.php
     banned_code:
         nodes:
             - { type: Stmt_Echo, functions: null }
